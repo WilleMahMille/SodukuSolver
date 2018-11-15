@@ -19,10 +19,11 @@ public:
 	void CheckRows();
 	void CheckSquare();
 
+	int value;
+
 private:
 	int x;
 	int y;
-	int value;
 
 };
 
@@ -33,6 +34,8 @@ public:
 	Node* topLeft;
 
 	void CreateGrid();
+	void PrintGrid();
+
 
 	void SetNodeValue(int x, int y, int number);
 	
