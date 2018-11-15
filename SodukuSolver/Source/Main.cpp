@@ -9,6 +9,7 @@ void AddNumbers() {
 	Node* current = grid.topLeft;
 	short keysDown;
 	bool done = false;
+
 	while (!done) {
 
 		if (GetAsyncKeyState('A') < 0 && keysDown & 1) {
