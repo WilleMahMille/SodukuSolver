@@ -81,7 +81,14 @@ void Grid::PrintGrid() {
 			for (int j = 0; j < 3; j++) {
 				std::cout << "█";
 				for (int k = 0; k < 3; k++) {
-					std::cout << "[" << current->value << "]";
+					std::cout << "[";
+					if (current->value == 0) {
+						std::cout << " ";
+					}
+					else {
+						std::cout << current->value;
+					}
+					std::cout << "]";
 					current = current->right;
 				}
 			}
