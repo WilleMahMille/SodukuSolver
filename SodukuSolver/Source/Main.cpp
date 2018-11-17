@@ -61,9 +61,8 @@ void ManageInput() {
 			keysDown |= 8;
 		}
 
-		for (int i = 1; i <= 9; i++) {
+		for (int i = 0; i <= 9; i++) {
 			if (GetAsyncKeyState(std::to_string(i)[0]) < 0 || GetAsyncKeyState(0x60 + i) < 0) {
-				std::cout << i;
 				grid.SetNodeValue(x, y, i);
 				updateSodoku(x, y);
 
