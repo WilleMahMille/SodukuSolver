@@ -39,43 +39,33 @@ void Grid::CreateGrid() {
 			top = top->right;
 			current->up = top;
 			top->down = current;
-
-
 		}
-
-
 	}
-
-
-
 }
 
-void Grid::UpdatePossible() {
-	Node* current;
-	for (int i = 0; i < 9; i++) {
-		current = topLeft;
-		for (int j = 0; j < i; j++) {
-			current = topLeft->down;
-		}
-		for (int j = 0; j < 9; j++) {
-			//check everything
-			current->CheckRows();
-			current->CheckSquare();
-
-			current = current->right;
-		}
+void Grid::SetNodeValue(int x, int y, int value) {
+	Node* current = topLeft;
+	for (int i = 0; i < x; i++) {
+		current = current->right;
 	}
-
-
+	for (int i = 0; i < y; i++) {
+		current = current->down;
+	}
+	current->value = value;
+	current->ClearPossible();
 }
 
 void Grid::PrintGrid() {
 	Node* current;
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0, 0 });
+	
+
 	for (int i = 0; i < 3; i++) {
 		std::cout << "███████████████████████████████\n";
 		for (int h = 0; h < 3; h++) {
 			current = topLeft;
-			for (int j = 0; j < i; j++) {
+			for (int j = 0; j < i * 3 + h; j++) {
 				current = current->down;
 			}
 			for (int j = 0; j < 3; j++) {
@@ -96,9 +86,67 @@ void Grid::PrintGrid() {
 		}
 	}
 	std::cout << "███████████████████████████████\n";
-
 }
 
+
+void Grid::Solve() {
+	int times = 0;
+	while (!CheckDone()) {
+
+		times++;
+		PrintGrid();
+		UpdatePossible();
+		if (times % 100 == 0) {
+
+			OutputDebugStringA("100\n");
+		}
+		
+		if (times == 1000) {
+			std::cout << "Sodoku not solvable (according to the available algorithms\n";
+			system("pause");
+			return;
+		}
+		system("pause");
+	}
+	PrintGrid();
+	system("pause");
+}
+
+bool Grid::CheckDone() {
+	Node* current;
+	for (int i = 0; i < 9; i++) {
+		current = topLeft;
+		for (int j = 0; j < i; j++) {
+			current = current->down;
+		}
+		for (int j = 0; j < 9; j++) {
+			if (current->value == 0) {
+				return false;
+			}
+			current = current->right;
+		}
+	}
+	return true;
+}
+
+void Grid::UpdatePossible() {
+	Node* current;
+	for (int i = 0; i < 9; i++) {
+		current = topLeft;
+		for (int j = 0; j < i; j++) {
+			current = current->down;
+		}
+		for (int j = 0; j < 9; j++) {
+			//check everything
+			current->CheckRows();
+			current->CheckSquare();
+			current->CheckValue();
+
+			current = current->right;
+
+		}
+	}
+}
 
 void Node::CheckRows() {
 	Node* current = this;
@@ -107,7 +155,7 @@ void Node::CheckRows() {
 		possible[current->value] = 0;
 	}
 	current = this;
-	for (int i = 0; i < 9 - x; i++) {
+	for (int i = 0; i < 8 - x; i++) {
 		current = current->right;
 		possible[current->value] = 0;
 	}
@@ -117,7 +165,7 @@ void Node::CheckRows() {
 		possible[current->value] = 0;
 	}
 	current = this;
-	for (int i = 0; i < 9 - y; i++) {
+	for (int i = 0; i < 8 - y; i++) {
 		current = current->down;
 		possible[current->value] = 0;
 	}
@@ -125,10 +173,80 @@ void Node::CheckRows() {
 }
 
 void Node::CheckSquare() {
+	Node* current = this;
+	Node* topLeftSquare;
+	for (int i = 0; i < x % 3; i++) {
+		current = current->left;
+	}
+	for (int i = 0; i < y % 3; i++) {
+		current = current->up;
+	}
+	topLeftSquare = current;
+	for (int i = 0; i < 3; i++) {
+		current = topLeftSquare;
+		for (int j = 0; j < i; j++) {
+			current = current->down;
+		}
+		for (int j = 0; j < 3; j++) {
+			possible[current->value] = 0;
+			current = current->right;
+		}
+	}
+
+	//check if there are no possible squares for a specific number
+	
+	for (int i = 1; i <= 9; i++) {
+		if (CheckSquareForNumber(i, topLeftSquare)) {
+			value = i;
+			ClearPossible();
+		}
+	}
+
 
 }
 
+bool Node::CheckSquareForNumber(int number, Node* topLeftSquare) {
+	Node* nCurrent;
 
+	for (int j = 0; j < 3; j++) {
+		nCurrent = topLeftSquare;
+		for (int k = 0; k < j; k++) {
+			nCurrent = nCurrent->down;
+		}
+		for (int k = 0; k < 3; k++) {
+			if (nCurrent->possible[number] == number && nCurrent != this) {
+				return false;
+			}
+			nCurrent = nCurrent->right;
+		}
+	}
+	return true;
+}
+
+
+void Node::CheckValue() {
+	int possibleValues = 0;
+	for (int i = 1; i <= 9; i++) {
+		if (possible[i] != 0) {
+			possibleValues++;
+		}
+	}
+	if (possibleValues == 1) {
+		for (int i = 1; i <= 9; i++) {
+			if (possible[i] != 0) {
+				value = possible[i];
+				ClearPossible();
+			}
+		}
+	}
+
+}
+
+void Node::ClearPossible() {
+	for (int i = 0; i < 10; i++) {
+		possible[i] = 0;
+	}
+}
 
 Node::Node(int _x, int _y) {
 	x = _x;
