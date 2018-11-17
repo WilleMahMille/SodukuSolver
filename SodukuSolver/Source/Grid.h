@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
-
+#include <string>
+#include <Windows.h>
+#include <WinUser.h>
+#include <WinBase.h>
 
 class Node {
 public:
@@ -14,10 +17,12 @@ public:
 
 	int possible[10];
 
-	void WriteCoords();
+	void ClearPossible();
 
 	void CheckRows();
 	void CheckSquare();
+	void CheckValue();
+	bool CheckSquareForNumber(int number, Node* topLeftSquare);
 
 	int value;
 
@@ -35,10 +40,11 @@ public:
 
 	void CreateGrid();
 	void PrintGrid();
-
+	void Solve();
 
 	void SetNodeValue(int x, int y, int number);
 	
+	bool CheckDone();
 	void UpdatePossible();
 	void CheckPossible();
 
