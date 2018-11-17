@@ -1,4 +1,4 @@
-#include "Grid.h"
+﻿#include "Grid.h"
 
 
 Grid::Grid() {
@@ -69,6 +69,30 @@ void Grid::UpdatePossible() {
 
 }
 
+void Grid::PrintGrid() {
+	Node* current;
+	for (int i = 0; i < 3; i++) {
+		std::cout << "███████████████████████████████\n";
+		for (int h = 0; h < 3; h++) {
+			current = topLeft;
+			for (int j = 0; j < i; j++) {
+				current = current->down;
+			}
+			for (int j = 0; j < 3; j++) {
+				std::cout << "█";
+				for (int k = 0; k < 3; k++) {
+					std::cout << "[" << current->value << "]";
+					current = current->right;
+				}
+			}
+			std::cout << "█\n";
+		}
+	}
+	std::cout << "███████████████████████████████\n";
+
+}
+
+
 void Node::CheckRows() {
 	Node* current = this;
 	for (int i = 0; i < x; i++) {
@@ -105,7 +129,7 @@ Node::Node(int _x, int _y) {
 	for (int i = 0; i < 10; i++) {
 		possible[i] = i;
 	}
-	
+	value = 0;
 }
 
 Node::~Node() {
