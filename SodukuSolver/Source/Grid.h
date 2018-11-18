@@ -49,7 +49,7 @@ public:
 	
 	bool CheckDone();
 	void UpdatePossible();
-	void CheckPossible();
+	void CheckPair();
 
 
 

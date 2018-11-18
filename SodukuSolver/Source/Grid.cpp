@@ -153,7 +153,9 @@ void Grid::UpdatePossible() {
 				current->CheckRows();
 				
 				current->CheckSquare();
+
 				current->CheckAdvancedRow();
+
 				current->CheckValue();
 				
 			}
@@ -164,6 +166,9 @@ void Grid::UpdatePossible() {
 		}
 	}
 }
+
+
+
 
 void Node::CheckRows() {
 	Node* current = this;
@@ -259,7 +264,7 @@ void Node::CheckAdvancedRow() {
 			current = current->up;
 		}
 		for (int j = 1; j <= 9; j++) {
-			if (CheckSquareRow(i, current)) {
+			if (CheckSquareRow(j, current)) {
 				possible[j] = 0;
 			}
 		}
@@ -278,11 +283,12 @@ void Node::CheckAdvancedRow() {
 			current = current->up;
 		}
 		for (int j = 1; j <= 9; j++) {
-			if (CheckSquareRow(i, current)) {
+			if (CheckSquareRow(j, current)) {
 				possible[j] = 0;
 			}
 		}
 	}
+	
 	for (int i = 1; i <= squareY; i++) {
 		current = this;
 		for (int k = 0; k < i; k++) {
@@ -297,7 +303,7 @@ void Node::CheckAdvancedRow() {
 			current = current->up;
 		}
 		for (int j = 1; j <= 9; j++) {
-			if (CheckSquareRow(i, current)) {
+			if (CheckSquareRow(j, current)) {
 				possible[j] = 0;
 			}
 		}
@@ -317,12 +323,12 @@ void Node::CheckAdvancedRow() {
 			current = current->up;
 		}
 		for (int j = 1; j <= 9; j++) {
-			if (CheckSquareRow(i, current)) {
+			if (CheckSquareRow(j, current)) {
 				possible[j] = 0;
 			}
 		}
 	}
-
+	
 }
 
 bool Node::CheckSquareRow(int number, Node* topLeftSquare) {
