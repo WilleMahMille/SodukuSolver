@@ -25,7 +25,7 @@ public:
 	bool CheckSquareForNumber(int number, Node* topLeftSquare);
 	
 	void CheckAdvancedRow(); //if only 2 boxes in 1 square are potential, and they are on the same row, remove the potential from that row
-
+	bool CheckSquareRow(int number, Node* topLeftSquare);
 
 	int value;
 

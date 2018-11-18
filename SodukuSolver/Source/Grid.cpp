@@ -151,8 +151,11 @@ void Grid::UpdatePossible() {
 			if (current->value == 0) {
 				//check everything
 				current->CheckRows();
+				
 				current->CheckSquare();
+				current->CheckAdvancedRow();
 				current->CheckValue();
+				
 			}
 
 			current = current->right;
@@ -238,6 +241,116 @@ bool Node::CheckSquareForNumber(int number, Node* topLeftSquare) {
 }
 
 
+void Node::CheckAdvancedRow() {
+	Node* current = this;
+	int squareX = x / 3;
+	int squareY = y / 3;
+	for (int i = 1; i <= squareX; i++) {
+		current = this;
+		for (int k = 0; k < i; k++) {
+			for (int j = 0; j < 3; j++) {
+				current = current->left;
+			}
+		}
+		for (int j = 0; j < x % 3; j++) {
+			current = current->left;
+		}
+		for (int j = 0; j < y % 3; j++) {
+			current = current->up;
+		}
+		for (int j = 1; j <= 9; j++) {
+			if (CheckSquareRow(i, current)) {
+				possible[j] = 0;
+			}
+		}
+	}
+	for (int i = 1; i <= 2 - squareX; i++) {
+		current = this;
+		for (int k = 0; k < i; k++) {
+			for (int j = 0; j < 3; j++) {
+				current = current->right;
+			}
+		}
+		for (int j = 0; j < x % 3; j++) {
+			current = current->left;
+		}
+		for (int j = 0; j < y % 3; j++) {
+			current = current->up;
+		}
+		for (int j = 1; j <= 9; j++) {
+			if (CheckSquareRow(i, current)) {
+				possible[j] = 0;
+			}
+		}
+	}
+	for (int i = 1; i <= squareY; i++) {
+		current = this;
+		for (int k = 0; k < i; k++) {
+			for (int j = 0; j < 3; j++) {
+				current = current->up;
+			}
+		}
+		for (int j = 0; j < x % 3; j++) {
+			current = current->left;
+		}
+		for (int j = 0; j < y % 3; j++) {
+			current = current->up;
+		}
+		for (int j = 1; j <= 9; j++) {
+			if (CheckSquareRow(i, current)) {
+				possible[j] = 0;
+			}
+		}
+	}
+
+	for (int i = 1; i <= 2 - squareY; i++) {
+		current = this;
+		for (int k = 0; k < i; k++) {
+			for (int j = 0; j < 3; j++) {
+				current = current->down;
+			}
+		}
+		for (int j = 0; j < x % 3; j++) {
+			current = current->left;
+		}
+		for (int j = 0; j < y % 3; j++) {
+			current = current->up;
+		}
+		for (int j = 1; j <= 9; j++) {
+			if (CheckSquareRow(i, current)) {
+				possible[j] = 0;
+			}
+		}
+	}
+
+}
+
+bool Node::CheckSquareRow(int number, Node* topLeftSquare) {
+	Node* current;
+	int found = 0;
+	for (int i = 0; i < 3; i++) {
+		current = topLeftSquare;
+		for (int j = 0; j < i; j++) {
+			current = current->down;
+		}
+		for (int j = 0; j < 3; j++) {
+			if (current->possible[number] == number && current->x != x && current->y != y || current->value == number) {
+				return false;
+			}
+			if (current->possible[number] == number && (current->x == x || current->y == y)) {
+				found++;
+			}
+			
+			current = current->right;
+		}
+	}
+	if (found == 2) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 
 void Node::CheckValue() {
