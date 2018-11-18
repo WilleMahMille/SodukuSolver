@@ -224,6 +224,8 @@ bool Node::CheckSquareForNumber(int number, Node* topLeftSquare) {
 }
 
 
+
+
 void Node::CheckValue() {
 	int possibleValues = 0;
 	for (int i = 1; i <= 9; i++) {
