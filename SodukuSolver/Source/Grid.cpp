@@ -45,6 +45,12 @@ void Grid::CreateGrid() {
 
 void Grid::SetNodeValue(int x, int y, int value) {
 	Node* current = topLeft;
+	if (value == 0) {
+		std::cout << " ";
+	}
+	else {
+		std::cout << value;
+	}
 	for (int i = 0; i < x; i++) {
 		current = current->right;
 	}
@@ -52,7 +58,15 @@ void Grid::SetNodeValue(int x, int y, int value) {
 		current = current->down;
 	}
 	current->value = value;
-	current->ClearPossible();
+	if (value != 0) {
+		current->ClearPossible();
+	}
+	else {
+		for (int i = 0; i < 10; i++) {
+			current->possible[i] = i;
+		}
+	
+	}
 }
 
 void Grid::PrintGrid() {
@@ -96,12 +110,9 @@ void Grid::Solve() {
 		times++;
 		PrintGrid();
 		UpdatePossible();
-		if (times % 100 == 0) {
-
-			OutputDebugStringA("100\n");
-		}
 		
-		if (times == 1000) {
+		
+		if (times == 100) {
 			std::cout << "Sodoku not solvable (according to the available algorithms\n";
 			system("pause");
 			return;
@@ -137,12 +148,15 @@ void Grid::UpdatePossible() {
 			current = current->down;
 		}
 		for (int j = 0; j < 9; j++) {
-			//check everything
-			current->CheckRows();
-			current->CheckSquare();
-			current->CheckValue();
+			if (current->value == 0) {
+				//check everything
+				current->CheckRows();
+				current->CheckSquare();
+				current->CheckValue();
+			}
 
 			current = current->right;
+			
 
 		}
 	}
@@ -214,7 +228,7 @@ bool Node::CheckSquareForNumber(int number, Node* topLeftSquare) {
 			nCurrent = nCurrent->down;
 		}
 		for (int k = 0; k < 3; k++) {
-			if (nCurrent->possible[number] == number && nCurrent != this) {
+			if ((nCurrent->possible[number] == number || nCurrent->value == number) && nCurrent != this) {
 				return false;
 			}
 			nCurrent = nCurrent->right;
