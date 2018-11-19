@@ -142,6 +142,7 @@ bool Grid::CheckDone() {
 
 void Grid::UpdatePossible() {
 	Node* current;
+
 	for (int i = 0; i < 9; i++) {
 		current = topLeft;
 		for (int j = 0; j < i; j++) {
@@ -165,9 +166,31 @@ void Grid::UpdatePossible() {
 
 		}
 	}
+	CheckPair();
 }
 
+void Grid::CheckPair() {
+	Node* current;
+	for (int i = 0; i < 3; i++) {
+		current = topLeft;
+		for (int j = 0; j < i * 3; j++) {
+			current = current->down;
+		}
+		for (int j = 0; j < 3; j++) {
+			for (int k = 0; k < j * 3; k++) {
+				current = current->right;
+			}
+			CheckSquareForPair(current);
+		}
+	}
+}
 
+void Grid::CheckSquareForPair(Node* topLeft) {
+	//redo function
+
+
+
+}
 
 
 void Node::CheckRows() {

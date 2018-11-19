@@ -5,6 +5,7 @@
 #include <WinUser.h>
 #include <WinBase.h>
 
+
 class Node {
 public:
 	Node(int _x, int _y);
@@ -50,7 +51,7 @@ public:
 	bool CheckDone();
 	void UpdatePossible();
 	void CheckPair();
-
+	void CheckSquareForPair(Node* topLeft);
 
 
 private:
