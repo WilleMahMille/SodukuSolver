@@ -117,7 +117,6 @@ void Grid::Solve() {
 			system("pause");
 			return;
 		}
-		system("pause");
 	}
 	PrintGrid();
 	system("pause");
@@ -142,7 +141,6 @@ bool Grid::CheckDone() {
 
 void Grid::UpdatePossible() {
 	Node* current;
-
 	for (int i = 0; i < 9; i++) {
 		current = topLeft;
 		for (int j = 0; j < i; j++) {
@@ -166,7 +164,9 @@ void Grid::UpdatePossible() {
 
 		}
 	}
+	system("pause");
 	CheckPair();
+	system("pause");
 }
 
 void Grid::CheckPair() {
@@ -177,18 +177,103 @@ void Grid::CheckPair() {
 			current = current->down;
 		}
 		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < j * 3; k++) {
+			GetSquareForPair(current);
+			for (int k = 0; k < 3; k++) {
 				current = current->right;
 			}
-			CheckSquareForPair(current);
 		}
 	}
 }
 
-void Grid::CheckSquareForPair(Node* topLeft) {
-	//redo function
+void Grid::GetSquareForPair(Node* topLeft) {
+	//function doesn't work entirely as intended (lacking requirements)
+	Node* current;
 
+	int amount;
+	bool pairs[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	for (int i = 0; i < 10; i++) {
+		amount = 0; 
+		for (int j = 0; j < 3; j++) {
+			current = topLeft;
+			for (int k = 0; k < j; k++) {
+				current = current->down;
+			}
+			for (int k = 0; k < 3; k++) {
+				if (current->possible[i] == i) {
+					amount++;
+				}
+				current = current->right;
+			}
+		}
+		if (amount == 2) {
+			pairs[i] = true;
+		}
+	}
+	CheckSquarePair(pairs, topLeft);
 
+}
+
+void Grid::CheckSquarePair(bool pairs[10], Node* topLeft) {
+	Node* current;
+	Node* pairOne;
+	Node* pairTwo;
+	for (int i = 0; i < 10; i++) {
+		if (pairs[i]) {
+		bool pairOneFound = false;
+		bool pairTwoFound = false;
+			for (int j = 0; j < 3; j++) {
+				current = topLeft;
+				pairOne = nullptr;
+				pairTwo = nullptr;
+				for (int k = 0; k < j; k++) {
+					current = current->down;
+				}
+				for (int k = 0; k < 3; k++) {
+					if (current->possible[i] == i) {
+						if (pairOne == nullptr) {
+							pairOne = current;
+						}
+						else {
+							pairTwo = current;
+						}
+					}
+					current = current->right;
+				}
+			}
+
+			for (int j = 0; j < 10; j++) {
+				if (pairs[j] && j != i) {
+					for (int k = 0; k < 3; k++) {
+						current = topLeft;
+						for (int l = 0; l < k; l++) {
+							current = current->down;
+						}
+						for (int l = 0; l < 3; l++) {
+							if (current->possible[j] == j) {
+								if (current == pairOne) {
+									pairOneFound = true;
+								}
+								if (current == pairTwo) {
+									pairTwoFound = true;
+								}
+								if (pairOneFound && pairTwoFound) {
+									std::cout << "pairs on (" << pairOne->x << "," << pairOne->y << ") and (" << pairTwo->x << "," << pairTwo->y << ") with " << i << " and " << j << "\n";
+									pairOne->ClearPossible();
+									pairOne->possible[i] = i;
+									pairOne->possible[j] = j;
+									pairTwo->ClearPossible();
+									pairTwo->possible[i] = i;
+									pairTwo->possible[j] = j;
+								}
+							}
+							current = current->right;
+						}
+					}
+				}
+			}
+
+		}
+	}
 
 }
 

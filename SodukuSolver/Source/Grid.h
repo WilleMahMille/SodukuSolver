@@ -30,7 +30,6 @@ public:
 
 	int value;
 
-private:
 	int x;
 	int y;
 
@@ -51,8 +50,9 @@ public:
 	bool CheckDone();
 	void UpdatePossible();
 	void CheckPair();
-	void CheckSquareForPair(Node* topLeft);
+	void GetSquareForPair(Node* topLeft);
 
+	void CheckSquarePair(bool pairs[10], Node* topLeft);
 
 private:
 
