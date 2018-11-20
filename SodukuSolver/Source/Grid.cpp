@@ -166,7 +166,6 @@ void Grid::UpdatePossible() {
 	}
 	system("pause");
 	CheckPair();
-	system("pause");
 }
 
 void Grid::CheckPair() {
@@ -217,10 +216,11 @@ void Grid::CheckSquarePair(bool pairs[10], Node* topLeft) {
 	Node* current;
 	Node* pairOne;
 	Node* pairTwo;
+
+	bool pairOneFound = false;
+	bool pairTwoFound = false;
 	for (int i = 0; i < 10; i++) {
 		if (pairs[i]) {
-		bool pairOneFound = false;
-		bool pairTwoFound = false;
 			for (int j = 0; j < 3; j++) {
 				current = topLeft;
 				pairOne = nullptr;
@@ -242,6 +242,9 @@ void Grid::CheckSquarePair(bool pairs[10], Node* topLeft) {
 			}
 
 			for (int j = 0; j < 10; j++) {
+
+				pairOneFound = false;
+				pairTwoFound = false;
 				if (pairs[j] && j != i) {
 					for (int k = 0; k < 3; k++) {
 						current = topLeft;
@@ -258,6 +261,7 @@ void Grid::CheckSquarePair(bool pairs[10], Node* topLeft) {
 								}
 								if (pairOneFound && pairTwoFound) {
 									std::cout << "pairs on (" << pairOne->x << "," << pairOne->y << ") and (" << pairTwo->x << "," << pairTwo->y << ") with " << i << " and " << j << "\n";
+									
 									pairOne->ClearPossible();
 									pairOne->possible[i] = i;
 									pairOne->possible[j] = j;

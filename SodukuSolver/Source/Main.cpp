@@ -96,9 +96,9 @@ void SeePossible() {
 			current = current->down;
 		}
 		for (int i = 0; i < 10; i++) {
-			std::cout << i << ": " << current->possible[i] << "\n";
+			std::cout << "(" << i << ": " << current->possible[i] << ") ";
 		}
-
+		std::cout << "\n";
 	}
 }
 
